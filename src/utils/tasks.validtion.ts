@@ -24,8 +24,6 @@ export class IsTaskAlreadyExistConstraint
 
 export function IsTaskAlreadyExist(validationOptions?: ValidationOptions) {
   return function (object: object, propertyName: string) {
-    console.log(object, propertyName);
-
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
