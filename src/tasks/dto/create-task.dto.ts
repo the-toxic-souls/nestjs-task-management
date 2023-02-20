@@ -5,7 +5,9 @@ export class CreateTaskDto {
   @IsTaskAlreadyExist({
     message: 'User $value already exists. Choose another name.',
   })
+  @IsString()
   title: string;
 
+  @IsString()
   description: string;
 }
