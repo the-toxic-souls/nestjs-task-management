@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid';
 import { Search } from './dto/get-search-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 @Injectable()
 export class TasksService {
   constructor(
@@ -68,7 +68,7 @@ export class TasksService {
     return this.taskRepository.update(parseInt(id), updateTaskDto);
   }
 
-  remove(id: string): void {
-    this.taskRepository.delete(parseInt(id));
+  remove(id: string): Promise<DeleteResult> {
+    return this.taskRepository.delete(parseInt(id));
   }
 }
