@@ -7,14 +7,18 @@ import {
   Param,
   Delete,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Search } from './dto/get-search-task.dto';
 import { Task } from './entities/task.entity';
+import { Validate } from 'class-validator';
 
 @Controller('tasks')
+@UsePipes(new ValidationPipe())
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
