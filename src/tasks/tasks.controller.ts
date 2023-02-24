@@ -17,14 +17,16 @@ import { Task } from './entities/task.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/utils/get-user.decorator';
 import { User } from 'src/users/entities/user.entity';
-
+import { Logger } from '@nestjs/common';
 @Controller('tasks')
 @UseGuards(AuthGuard())
 export class TasksController {
+  private logger = new Logger();
   constructor(private readonly tasksService: TasksService) {}
 
   @Post()
   create(@Body() createTaskDto: CreateTaskDto, @GetUser() user: User) {
+    this.logger.log(`Task created: ${createTaskDto.title}`);
     return this.tasksService.create(createTaskDto, user);
   }
 
