@@ -7,26 +7,27 @@ import { Search } from './dto/get-search-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
 import { DeleteResult, Repository } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
 @Injectable()
 export class TasksService {
   constructor(
     @InjectRepository(Task) private taskRepository: Repository<Task>,
   ) {}
-  async create(createTaskDto: CreateTaskDto): Promise<Task> {
+  async create(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
     const task = this.taskRepository.create({
       title: createTaskDto.title,
       description: createTaskDto.description,
       status: TaskStatus.OPEN,
+      user: user,
     });
     await this.taskRepository.save(task);
     return task;
   }
 
-  async findAll(filterDto: Search): Promise<Task[]> {
-    return await this.taskRepository.find({
-      skip: filterDto.page,
-      take: filterDto.limit,
-    });
+  async findAll(filterDto: Search, user: User): Promise<Task[]> {
+    const query = this.taskRepository.createQueryBuilder('task');
+    query.where({ user });
+    return await query.getMany();
   }
 
   // getTasksWithFilters(filterDto: Search): Tasks[] {
@@ -52,10 +53,13 @@ export class TasksService {
   //   return tasks;
   // }
 
-  async findOne(id: string): Promise<Task> {
+  async findOne(id: string, user: User): Promise<Task> {
     const found = await this.taskRepository.findOne({
       where: {
         id: parseInt(id),
+        user: {
+          username: user.username,
+        },
       },
     });
     if (!found) {
@@ -64,11 +68,16 @@ export class TasksService {
     return found;
   }
 
-  update(id: string, updateTaskDto: UpdateTaskDto) {
+  update(id: string, updateTaskDto: UpdateTaskDto, user: User) {
     return this.taskRepository.update(parseInt(id), updateTaskDto);
   }
 
-  remove(id: string): Promise<DeleteResult> {
-    return this.taskRepository.delete(parseInt(id));
+  remove(id: string, user: User): Promise<DeleteResult> {
+    return this.taskRepository
+      .createQueryBuilder('task')
+      .delete()
+      .andWhere('user = :user', { user: user })
+      .where('id = :id', { id: parseInt(id) })
+      .execute();
   }
 }
