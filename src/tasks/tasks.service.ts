@@ -7,7 +7,7 @@ import { Search } from './dto/get-search-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
 import { DeleteResult, Repository } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 @Injectable()
 export class TasksService {
   constructor(

@@ -5,7 +5,7 @@ import {
   ValidatorConstraintInterface,
   ValidationArguments,
 } from 'class-validator';
-import { Task } from 'src/tasks/entities/task.entity';
+import { Task } from '../tasks/entities/task.entity';
 
 @ValidatorConstraint({ async: true })
 export class IsTaskAlreadyExistConstraint

@@ -1,5 +1,5 @@
 import { IsString } from 'class-validator';
-import { IsTaskAlreadyExist } from 'src/utils/tasks.validtion';
+import { IsTaskAlreadyExist } from '../../utils/tasks.validtion';
 
 export class CreateTaskDto {
   @IsTaskAlreadyExist({
