@@ -1,9 +1,10 @@
-import { User } from 'src/users/entities/user.entity';
+import { Exclude } from 'class-transformer';
+import { User } from '../../users/entities/user.entity';
 import {
   BaseEntity,
   Column,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -21,6 +22,7 @@ export class Task extends BaseEntity {
   @Column()
   status: string;
 
-  @OneToMany((_type) => User, (user) => user.task, { eager: false })
+  @ManyToOne((_type) => User, (user) => user.tasks, { eager: false })
+  @Exclude({ toPlainOnly: true })
   user: User;
 }
